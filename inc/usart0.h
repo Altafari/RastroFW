@@ -10,21 +10,21 @@
 
 #include <inttypes.h>
 
-#define USART0_RX_BUFF_SIZE 32
-#define USART0_BITMASK 31
-#define USART0_RX_TIMEOUT 100
+#define USART0_RX_BUFF_SIZE 256
+#define USART0_BITMASK 255
+#define USART0_RX_TIMEOUT 150
 
 namespace Usart0 {
 
+	extern volatile uint8_t timer;
 	void initUsart();
 	void disableUsart();
 	uint8_t available();
 	uint8_t peek();
 	uint8_t read();
-	uint8_t readBytes(uint8_t *ptr, uint16_t cnt);
+	uint16_t readBytes(uint8_t *ptr, uint16_t cnt);
 	void write(const uint8_t *ptr, uint8_t cnt);
 	uint8_t isTxBusy();
-	void onTimerTick();
 }
 
 #endif /* SRC_USART0_H_ */

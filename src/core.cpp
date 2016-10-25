@@ -7,6 +7,7 @@
 
 #include <avr/io.h>
 #include <string.h>
+#include <util/delay.h>
 #include "../inc/core.h"
 #include "../inc/usart0.h"
 #include "../inc/crc16.h"
@@ -21,17 +22,18 @@
 
 namespace Core {
 
-volatile uint8_t defaultLaserState = LASER_OFF;
+uint8_t defaultLaserState = LASER_OFF;
 
 uint8_t buffer[2][BUFF_SIZE];
+uint16_t dataSize;
 uint8_t *rxBuff;
 uint8_t *wBuff;
 uint8_t isEnabled;
 
-volatile const char* nak = "NAK";
-volatile const char* ack = "ACK";
+const char *nak = "NAK";
+const char *ack = "ACK";
 
-volatile struct Settings settings;
+struct Settings settings;
 
 void initCore() {
 	rxBuff = buffer[0];
@@ -40,12 +42,10 @@ void initCore() {
 }
 
 void loopCore() {
-	uint16_t dataSize;
 	if (Usart0::available()) {
 		uint8_t inByte = Usart0::peek();
 		switch(inByte) {
 		case 'L':
-			dataSize = ((settings.lnLength + 7) >> 3) + 4;
 			if (Usart0::readBytes(rxBuff, dataSize) == dataSize &&
 					rxBuff[1] == 'N' &&
 					checkCrc16(rxBuff, dataSize)) {
@@ -61,9 +61,10 @@ void loopCore() {
 					settings.header[1] == 'F' &&
 					checkCrc16((uint8_t*)&settings, sizeof(settings)) &&
 					verifySettings()) {
-				Ptracker::setZero();
-				isEnabled = 1;
-				Timer1::setPulseDuration(settings.expTime);
+				//Ptracker::setZero();
+				//isEnabled = 1;
+				//Timer1::setPulseDuration(settings.expTime);
+				dataSize = ((settings.lnLength + 7) >> 3) + 4;
 				sendACK();
 			}
 			else {
@@ -84,7 +85,7 @@ inline void sendACK() {
 inline void sendNAK() {
 	Usart0::write((uint8_t*)nak, 3);
 }
-
+/*
 void onDirChanged(uint8_t dir) {
 	if (settings.mode){
 		isEnabled = !dir;
@@ -95,11 +96,12 @@ void onDirChanged(uint8_t dir) {
 }
 
 void onPositionChanged(int16_t xPos) {
+	Timer1::pulse();
 	if (isEnabled && computeLaserState(xPos)) {
 		Timer1::pulse();
 	}
 }
-
+*/
 inline uint8_t computeLaserState(int16_t xPos) {
   if ((xPos < settings.offset) || (xPos >= settings.offset + settings.lnLength)) {
     return defaultLaserState;

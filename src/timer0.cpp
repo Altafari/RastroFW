@@ -7,14 +7,12 @@
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
-
+#include "../inc/usart0.h"
 #include "../inc/timer0.h"
 
 #define TIMER0_TOP 249
 
 namespace Timer0 {
-
-FVoid timerHandlers[5] = {0, 0, 0, 0, 0};
 
 void initTimer() {
 	TCCR0A = (1<<WGM01);	// Mode2: CTC
@@ -26,10 +24,7 @@ void initTimer() {
 }
 
 ISR(TIMER0_COMPA_vect) {
-	uint8_t i = 0;
-	while (timerHandlers[i] != 0) {
-		timerHandlers[i]();
-		i++;
-	}
+	PORTC ^= (1<<PC5);
+	Usart0::timer++;
 }
 }

@@ -12,12 +12,12 @@
 
 namespace Usart0 {
 
-volatile static uint8_t rxIdx;
-volatile static uint8_t rxBuff[USART0_RX_BUFF_SIZE];
-volatile static const uint8_t *txPtr;
-volatile static int8_t txBytesLeft;
-volatile static uint8_t timer;
-static uint8_t rdIdx;
+volatile uint8_t rxIdx;
+uint8_t rxBuff[USART0_RX_BUFF_SIZE];
+const uint8_t *txPtr;
+volatile int8_t txBytesLeft;
+uint8_t rdIdx;
+volatile uint8_t timer;
 
 void initUsart() {
 	rxIdx = 0;
@@ -48,18 +48,19 @@ uint8_t read() {
 	return res;
 }
 
-uint8_t readBytes(uint8_t *ptr, uint16_t cnt) {
-	uint16_t ctr = 0;
+uint16_t readBytes(uint8_t *ptr, uint16_t cnt) {
 	timer = 0;
+	uint16_t ctr = 0;
 	while(ctr < cnt) {
-		while(rdIdx != rxIdx) {
+		if(rdIdx != rxIdx) {
 			*ptr++ = rxBuff[rdIdx];
 			rdIdx = (rdIdx + 1) & USART0_BITMASK;
 			ctr++;
 			timer = 0;
-		}
-		if (timer >= USART0_RX_TIMEOUT) {
-			break;
+		} else {
+			if (timer >= USART0_RX_TIMEOUT) {
+				break;
+			}
 		}
 	}
 	return ctr;
@@ -72,6 +73,7 @@ void write(const uint8_t *ptr, uint8_t cnt) {
 	while (txBytesLeft != 0); // Wait while transmission completes
 	txPtr = ptr;
 	txBytesLeft = cnt;
+	UCSR0B |= (1<<UDRIE0);
 }
 
 uint8_t isTxBusy() {
@@ -88,13 +90,12 @@ ISR(USART0_UDRE_vect) {
 		UDR0 = *txPtr++;
 		txBytesLeft--;
 	}
+	else {
+		UCSR0B &= ~(1<<UDRIE0);
+	}
 }
 
 void disableUsart() {
 	UCSR0B = (1<<RXCIE0) | (1<<RXEN0) | (1<<TXEN0) | (1<<UDRIE0);
-}
-
-void onTimerTick() {
-	timer++;
 }
 }

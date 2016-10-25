@@ -6,49 +6,15 @@ Archive member included because of file (symbol)
                               ./src/core.o (__do_copy_data)
 /usr/lib/gcc/avr/4.8.2/avr6/libgcc.a(_clear_bss.o)
                               ./src/core.o (__do_clear_bss)
-/usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr6/libc.a(memset.o)
-                              ./src/core.o (memset)
 
 Discarded input sections
 
  .bss           0x0000000000000000        0x0 /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr6/crtm2560.o
- .group         0x0000000000000000        0x8 ./src/core.o
- .group         0x0000000000000000        0x8 ./src/core.o
- .group         0x0000000000000000        0x8 ./src/core.o
- .text          0x0000000000000000        0x0 ./src/core.o
- .bss           0x0000000000000000        0x0 ./src/core.o
- .bss._ZN4Core17defaultLaserStateE
-                0x0000000000000000        0x1 ./src/core.o
- .text._ZN4Core12onDirChangedEh
-                0x0000000000000000       0x3a ./src/core.o
- .text._ZN4Core17onPositionChangedEi
-                0x0000000000000000       0x1e ./src/core.o
- .text          0x0000000000000000        0x0 ./src/crc16.o
  .bss           0x0000000000000000        0x0 ./src/crc16.o
  .text          0x0000000000000000        0x0 ./src/main.o
  .bss           0x0000000000000000        0x0 ./src/main.o
- .text          0x0000000000000000        0x0 ./src/ptracker.o
- .bss           0x0000000000000000        0x0 ./src/ptracker.o
- .text._ZN8Ptracker11initTrackerEv
-                0x0000000000000000       0x2a ./src/ptracker.o
- .text._ZN8Ptracker6getPosEv
-                0x0000000000000000       0x2a ./src/ptracker.o
- .text          0x0000000000000000        0x0 ./src/timer0.o
  .bss           0x0000000000000000        0x0 ./src/timer0.o
- .text._ZN6Timer09initTimerEv
-                0x0000000000000000       0x50 ./src/timer0.o
- .text          0x0000000000000000        0x0 ./src/timer1.o
  .bss           0x0000000000000000        0x0 ./src/timer1.o
- .text._ZN6Timer19initTimerEv
-                0x0000000000000000       0x68 ./src/timer1.o
- .text._ZN6Timer15pulseEv
-                0x0000000000000000       0x40 ./src/timer1.o
- .text          0x0000000000000000        0x0 ./src/usart0.o
- .bss           0x0000000000000000        0x0 ./src/usart0.o
- .text._ZN6Usart08isTxBusyEv
-                0x0000000000000000       0x1a ./src/usart0.o
- .text._ZN6Usart012disableUsartEv
-                0x0000000000000000       0x18 ./src/usart0.o
  .text          0x0000000000000000        0x0 /usr/lib/gcc/avr/4.8.2/avr6/libgcc.a(_exit.o)
  .bss           0x0000000000000000        0x0 /usr/lib/gcc/avr/4.8.2/avr6/libgcc.a(_exit.o)
  .text.libgcc.mul
@@ -94,8 +60,6 @@ Discarded input sections
                 0x0000000000000000        0x0 /usr/lib/gcc/avr/4.8.2/avr6/libgcc.a(_clear_bss.o)
  .text.libgcc.fixed
                 0x0000000000000000        0x0 /usr/lib/gcc/avr/4.8.2/avr6/libgcc.a(_clear_bss.o)
- .text          0x0000000000000000        0x0 /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr6/libc.a(memset.o)
- .bss           0x0000000000000000        0x0 /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr6/libc.a(memset.o)
 
 Memory Configuration
 
@@ -218,7 +182,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x0000000000000000      0xb7c
+.text           0x0000000000000000      0x816
  *(.vectors)
  .vectors       0x0000000000000000       0xe4 /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr6/crtm2560.o
                 0x0000000000000000                __vectors
@@ -226,8 +190,7 @@ END GROUP
  *(.vectors)
  *(.progmem.gcc*)
  *(.progmem*)
- .progmem.data._ZL9CRC16_TBL
-                0x00000000000000e4      0x200 ./src/crc16.o
+ .progmem.data  0x00000000000000e4      0x200 ./src/crc16.o
                 0x00000000000002e4                . = ALIGN (0x2)
                 0x00000000000002e4                __trampolines_start = .
  *(.trampolines)
@@ -328,78 +291,45 @@ END GROUP
                 0x0000000000000322                __vector_16
                 0x0000000000000322                __vector_18
                 0x0000000000000322                __vector_42
-                0x0000000000000324                . = ALIGN (0x2)
- *(.text.*)
- .text._ZN4Core8initCoreEv
-                0x0000000000000324       0x38 ./src/core.o
+ .text          0x0000000000000324      0x144 ./src/core.o
                 0x0000000000000324                _ZN4Core8initCoreEv
- .text._ZN4Core8loopCoreEv
-                0x000000000000035c      0x12c ./src/core.o
-                0x000000000000035c                _ZN4Core8loopCoreEv
- .text._ZN4Core7sendACKEv
-                0x0000000000000488       0x1a ./src/core.o
-                0x0000000000000488                _ZN4Core7sendACKEv
- .text._ZN4Core7sendNAKEv
-                0x00000000000004a2       0x1a ./src/core.o
-                0x00000000000004a2                _ZN4Core7sendNAKEv
- .text._ZN4Core11swapBuffersEv
-                0x00000000000004bc       0x3e ./src/core.o
-                0x00000000000004bc                _ZN4Core11swapBuffersEv
- .text._ZN4Core14verifySettingsEv
-                0x00000000000004fa       0x8a ./src/core.o
-                0x00000000000004fa                _ZN4Core14verifySettingsEv
- .text._Z10checkCrc16PKhj
-                0x0000000000000584       0xf6 ./src/crc16.o
-                0x0000000000000584                _Z10checkCrc16PKhj
- .text.main     0x000000000000067a       0x14 ./src/main.o
-                0x000000000000067a                main
- .text._ZN8Ptracker7setZeroEv
-                0x000000000000068e       0x1a ./src/ptracker.o
-                0x000000000000068e                _ZN8Ptracker7setZeroEv
- .text.__vector_1
-                0x00000000000006a8      0x11a ./src/ptracker.o
-                0x00000000000006a8                __vector_1
- .text.__vector_21
-                0x00000000000007c2       0x32 ./src/timer0.o
-                0x00000000000007c2                __vector_21
- .text._ZN6Timer116setPulseDurationEi
-                0x00000000000007f4       0x28 ./src/timer1.o
-                0x00000000000007f4                _ZN6Timer116setPulseDurationEi
- .text.__vector_20
-                0x000000000000081c       0x6c ./src/timer1.o
-                0x000000000000081c                __vector_20
- .text._ZN6Usart09initUsartEv
-                0x0000000000000888       0x6a ./src/usart0.o
-                0x0000000000000888                _ZN6Usart09initUsartEv
- .text._ZN6Usart09availableEv
-                0x00000000000008f2       0x1e ./src/usart0.o
-                0x00000000000008f2                _ZN6Usart09availableEv
- .text._ZN6Usart04peekEv
-                0x0000000000000910       0x34 ./src/usart0.o
-                0x0000000000000910                _ZN6Usart04peekEv
- .text._ZN6Usart04readEv
-                0x0000000000000944       0x46 ./src/usart0.o
-                0x0000000000000944                _ZN6Usart04readEv
- .text._ZN6Usart09readBytesEPhj
-                0x000000000000098a       0xa2 ./src/usart0.o
-                0x000000000000098a                _ZN6Usart09readBytesEPhj
- .text._ZN6Usart05writeEPKhh
-                0x0000000000000a2c       0x48 ./src/usart0.o
-                0x0000000000000a2c                _ZN6Usart05writeEPKhh
- .text.__vector_25
-                0x0000000000000a74       0x6a ./src/usart0.o
-                0x0000000000000a74                __vector_25
- .text.__vector_26
-                0x0000000000000ade       0x8c ./src/usart0.o
-                0x0000000000000ade                __vector_26
- .text.avr-libc
-                0x0000000000000b6a        0xe /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr6/libc.a(memset.o)
-                0x0000000000000b6a                memset
-                0x0000000000000b78                . = ALIGN (0x2)
+                0x000000000000034e                _ZN4Core14verifySettingsEv
+                0x0000000000000398                _ZN4Core8loopCoreEv
+ .text          0x0000000000000468       0x7a ./src/crc16.o
+                0x0000000000000468                _Z10checkCrc16PKhj
+ .text          0x00000000000004e2       0x98 ./src/ptracker.o
+                0x00000000000004e2                _ZN8Ptracker11initTrackerEv
+                0x00000000000004f2                _ZN8Ptracker7setZeroEv
+                0x0000000000000500                _ZN8Ptracker6getPosEv
+                0x000000000000050e                __vector_1
+ .text          0x000000000000057a       0x44 ./src/timer0.o
+                0x000000000000057a                _ZN6Timer09initTimerEv
+                0x0000000000000590                __vector_21
+ .text          0x00000000000005be       0x94 ./src/timer1.o
+                0x00000000000005be                _ZN6Timer19initTimerEv
+                0x00000000000005ea                _ZN6Timer116setPulseDurationEi
+                0x00000000000005f4                _ZN6Timer15pulseEv
+                0x0000000000000616                __vector_20
+ .text          0x0000000000000652      0x1b2 ./src/usart0.o
+                0x0000000000000652                _ZN6Usart09initUsartEv
+                0x0000000000000692                _ZN6Usart09availableEv
+                0x00000000000006a4                _ZN6Usart04peekEv
+                0x00000000000006ba                _ZN6Usart04readEv
+                0x00000000000006d8                _ZN6Usart09readBytesEPhj
+                0x0000000000000724                _ZN6Usart05writeEPKhh
+                0x0000000000000748                _ZN6Usart08isTxBusyEv
+                0x0000000000000756                __vector_25
+                0x0000000000000798                __vector_26
+                0x00000000000007fc                _ZN6Usart012disableUsartEv
+                0x0000000000000804                . = ALIGN (0x2)
+ *(.text.*)
+ .text.startup  0x0000000000000804        0xe ./src/main.o
+                0x0000000000000804                main
+                0x0000000000000812                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x0000000000000b78        0x0 /usr/lib/gcc/avr/4.8.2/avr6/libgcc.a(_exit.o)
-                0x0000000000000b78                exit
-                0x0000000000000b78                _exit
+ .fini9         0x0000000000000812        0x0 /usr/lib/gcc/avr/4.8.2/avr6/libgcc.a(_exit.o)
+                0x0000000000000812                exit
+                0x0000000000000812                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -418,11 +348,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x0000000000000b78        0x4 /usr/lib/gcc/avr/4.8.2/avr6/libgcc.a(_exit.o)
+ .fini0         0x0000000000000812        0x4 /usr/lib/gcc/avr/4.8.2/avr6/libgcc.a(_exit.o)
  *(.fini0)
-                0x0000000000000b7c                _etext = .
+                0x0000000000000816                _etext = .
 
-.data           0x0000000000800200        0xc load address 0x0000000000000b7c
+.data           0x0000000000800200        0x8 load address 0x0000000000000816
                 0x0000000000800200                PROVIDE (__data_start, .)
  *(.data)
  .data          0x0000000000800200        0x0 /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr6/crtm2560.o
@@ -436,73 +366,46 @@ END GROUP
  .data          0x0000000000800200        0x0 /usr/lib/gcc/avr/4.8.2/avr6/libgcc.a(_exit.o)
  .data          0x0000000000800200        0x0 /usr/lib/gcc/avr/4.8.2/avr6/libgcc.a(_copy_data.o)
  .data          0x0000000000800200        0x0 /usr/lib/gcc/avr/4.8.2/avr6/libgcc.a(_clear_bss.o)
- .data          0x0000000000800200        0x0 /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr6/libc.a(memset.o)
  *(.data*)
- .data._ZN4Core3nakE
-                0x0000000000800200        0x2 ./src/core.o
-                0x0000000000800200                _ZN4Core3nakE
- .data._ZN4Core3ackE
-                0x0000000000800202        0x2 ./src/core.o
-                0x0000000000800202                _ZN4Core3ackE
  *(.rodata)
- .rodata        0x0000000000800204        0x8 ./src/core.o
+ .rodata        0x0000000000800200        0x8 ./src/core.o
  *(.rodata*)
  *(.gnu.linkonce.d*)
-                0x000000000080020c                . = ALIGN (0x2)
-                0x000000000080020c                _edata = .
-                0x000000000080020c                PROVIDE (__data_end, .)
+                0x0000000000800208                . = ALIGN (0x2)
+                0x0000000000800208                _edata = .
+                0x0000000000800208                PROVIDE (__data_end, .)
 
-.bss            0x000000000080020c     0x10bf
-                0x000000000080020c                PROVIDE (__bss_start, .)
+.bss            0x0000000000800208     0x10bc
+                0x0000000000800208                PROVIDE (__bss_start, .)
  *(.bss)
+ .bss           0x0000000000800208      0xfb3 ./src/core.o
+                0x0000000000800208                _ZN4Core8settingsE
+                0x0000000000800213                _ZN4Core9isEnabledE
+                0x0000000000800214                _ZN4Core5wBuffE
+                0x0000000000800216                _ZN4Core6rxBuffE
+                0x0000000000800218                _ZN4Core8dataSizeE
+                0x000000000080021a                _ZN4Core6bufferE
+                0x00000000008011ba                _ZN4Core17defaultLaserStateE
+ .bss           0x00000000008011bb        0x3 ./src/ptracker.o
+ .bss           0x00000000008011be      0x106 ./src/usart0.o
+                0x00000000008011be                _ZN6Usart05timerE
+                0x00000000008011bf                _ZN6Usart05rdIdxE
+                0x00000000008011c0                _ZN6Usart011txBytesLeftE
+                0x00000000008011c1                _ZN6Usart05txPtrE
+                0x00000000008011c3                _ZN6Usart06rxBuffE
+                0x00000000008012c3                _ZN6Usart05rxIdxE
  *(.bss*)
- .bss._ZN4CoreL6bufferE
-                0x000000000080020c      0xfa0 ./src/core.o
- .bss._ZN4CoreL8dataSizeE
-                0x00000000008011ac        0x2 ./src/core.o
- .bss._ZN4CoreL6rxBuffE
-                0x00000000008011ae        0x2 ./src/core.o
- .bss._ZN4CoreL5wBuffE
-                0x00000000008011b0        0x2 ./src/core.o
- .bss._ZN4CoreL9isEnabledE
-                0x00000000008011b2        0x1 ./src/core.o
- .bss._ZN4Core8settingsE
-                0x00000000008011b3        0xb ./src/core.o
-                0x00000000008011b3                _ZN4Core8settingsE
- .bss._ZN8Ptracker15onDirChangedPtrE
-                0x00000000008011be        0x2 ./src/ptracker.o
-                0x00000000008011be                _ZN8Ptracker15onDirChangedPtrE
- .bss._ZN8Ptracker20onPositionChangedPtrE
-                0x00000000008011c0        0x2 ./src/ptracker.o
-                0x00000000008011c0                _ZN8Ptracker20onPositionChangedPtrE
- .bss._ZN8PtrackerL4xPosE
-                0x00000000008011c2        0x2 ./src/ptracker.o
- .bss._ZN8PtrackerL3dirE
-                0x00000000008011c4        0x1 ./src/ptracker.o
- .bss._ZN6Usart0L5rxIdxE
-                0x00000000008011c5        0x1 ./src/usart0.o
- .bss._ZN6Usart0L6rxBuffE
-                0x00000000008011c6      0x100 ./src/usart0.o
- .bss._ZN6Usart0L5txPtrE
-                0x00000000008012c6        0x2 ./src/usart0.o
- .bss._ZN6Usart0L11txBytesLeftE
-                0x00000000008012c8        0x1 ./src/usart0.o
- .bss._ZN6Usart0L5rdIdxE
-                0x00000000008012c9        0x1 ./src/usart0.o
- .bss._ZN6Usart05timerE
-                0x00000000008012ca        0x1 ./src/usart0.o
-                0x00000000008012ca                _ZN6Usart05timerE
  *(COMMON)
-                0x00000000008012cb                PROVIDE (__bss_end, .)
-                0x0000000000000b7c                __data_load_start = LOADADDR (.data)
-                0x0000000000000b88                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00000000008012c4                PROVIDE (__bss_end, .)
+                0x0000000000000816                __data_load_start = LOADADDR (.data)
+                0x000000000000081e                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00000000008012cb        0x0
-                0x00000000008012cb                PROVIDE (__noinit_start, .)
+.noinit         0x00000000008012c4        0x0
+                0x00000000008012c4                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x00000000008012cb                PROVIDE (__noinit_end, .)
-                0x00000000008012cb                _end = .
-                0x00000000008012cb                PROVIDE (__heap_start, .)
+                0x00000000008012c4                PROVIDE (__noinit_end, .)
+                0x00000000008012c4                _end = .
+                0x00000000008012c4                PROVIDE (__heap_start, .)
 
 .eeprom         0x0000000000810000        0x0
  *(.eeprom*)
@@ -523,29 +426,13 @@ END GROUP
 .user_signatures
  *(.user_signatures*)
 
-.stab           0x0000000000000000     0x32dc
+.stab           0x0000000000000000      0x6e4
  *(.stab)
  .stab          0x0000000000000000      0x6e4 /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr6/crtm2560.o
- .stab          0x00000000000006e4      0x978 ./src/core.o
-                                        0xa14 (size before relaxing)
- .stab          0x000000000000105c      0x5a0 ./src/crc16.o
-                                        0x5ac (size before relaxing)
- .stab          0x00000000000015fc      0x504 ./src/main.o
-                                        0x510 (size before relaxing)
- .stab          0x0000000000001b00      0x5a0 ./src/ptracker.o
-                                        0x66c (size before relaxing)
- .stab          0x00000000000020a0      0x4bc ./src/timer0.o
-                                        0x534 (size before relaxing)
- .stab          0x000000000000255c      0x4f8 ./src/timer1.o
-                                        0x5dc (size before relaxing)
- .stab          0x0000000000002a54      0x81c ./src/usart0.o
-                                        0x8dc (size before relaxing)
- .stab          0x0000000000003270       0x6c /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr6/libc.a(memset.o)
-                                         0x78 (size before relaxing)
 
-.stabstr        0x0000000000000000     0x1699
+.stabstr        0x0000000000000000       0x54
  *(.stabstr)
- .stabstr       0x0000000000000000     0x1699 /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr6/crtm2560.o
+ .stabstr       0x0000000000000000       0x54 /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr6/crtm2560.o
 
 .stab.excl
  *(.stab.excl)
@@ -624,32 +511,26 @@ LOAD linker stubs
 Cross Reference Table
 
 Symbol                                            File
-Core::ack                                         ./src/core.o
+Core::buffer                                      ./src/core.o
+Core::dataSize                                    ./src/core.o
 Core::defaultLaserState                           ./src/core.o
 Core::initCore()                                  ./src/core.o
                                                   ./src/main.o
+Core::isEnabled                                   ./src/core.o
 Core::loopCore()                                  ./src/core.o
                                                   ./src/main.o
-Core::nak                                         ./src/core.o
-Core::onDirChanged(unsigned char)                 ./src/core.o
-Core::onPositionChanged(int)                      ./src/core.o
-Core::sendACK()                                   ./src/core.o
-Core::sendNAK()                                   ./src/core.o
+Core::rxBuff                                      ./src/core.o
 Core::settings                                    ./src/core.o
-Core::swapBuffers()                               ./src/core.o
 Core::verifySettings()                            ./src/core.o
+Core::wBuff                                       ./src/core.o
 Ptracker::getPos()                                ./src/ptracker.o
 Ptracker::initTracker()                           ./src/ptracker.o
-Ptracker::onDirChangedPtr                         ./src/ptracker.o
-Ptracker::onPositionChangedPtr                    ./src/ptracker.o
 Ptracker::setZero()                               ./src/ptracker.o
-                                                  ./src/core.o
 Timer0::initTimer()                               ./src/timer0.o
+                                                  ./src/main.o
 Timer1::initTimer()                               ./src/timer1.o
 Timer1::pulse()                                   ./src/timer1.o
-                                                  ./src/core.o
 Timer1::setPulseDuration(int)                     ./src/timer1.o
-                                                  ./src/core.o
 Usart0::available()                               ./src/usart0.o
                                                   ./src/core.o
 Usart0::disableUsart()                            ./src/usart0.o
@@ -658,12 +539,17 @@ Usart0::initUsart()                               ./src/usart0.o
 Usart0::isTxBusy()                                ./src/usart0.o
 Usart0::peek()                                    ./src/usart0.o
                                                   ./src/core.o
+Usart0::rdIdx                                     ./src/usart0.o
 Usart0::read()                                    ./src/usart0.o
                                                   ./src/core.o
 Usart0::readBytes(unsigned char*, unsigned int)   ./src/usart0.o
                                                   ./src/core.o
+Usart0::rxBuff                                    ./src/usart0.o
+Usart0::rxIdx                                     ./src/usart0.o
 Usart0::timer                                     ./src/usart0.o
                                                   ./src/timer0.o
+Usart0::txBytesLeft                               ./src/usart0.o
+Usart0::txPtr                                     ./src/usart0.o
 Usart0::write(unsigned char const*, unsigned char) ./src/usart0.o
                                                   ./src/core.o
 __bad_interrupt                                   /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr6/crtm2560.o
@@ -751,6 +637,3 @@ exit                                              /usr/lib/gcc/avr/4.8.2/avr6/li
                                                   /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr6/crtm2560.o
 main                                              ./src/main.o
                                                   /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr6/crtm2560.o
-memset                                            /usr/lib/gcc/avr/4.8.2/../../../avr/lib/avr6/libc.a(memset.o)
-                                                  ./src/usart0.o
-                                                  ./src/core.o

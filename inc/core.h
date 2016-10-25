@@ -11,12 +11,12 @@
 namespace Core {
 
 struct Settings {
-	volatile uint8_t header[2];
-	volatile int16_t lnLength;
-	volatile int16_t offset;
-	volatile int16_t expTime;
-	volatile uint8_t mode;
-	volatile int16_t crc16;
+	uint8_t header[2];
+	int16_t lnLength;
+	int16_t offset;
+	int16_t expTime;
+	uint8_t mode;
+	int16_t crc16;
 };
 
 void initCore();

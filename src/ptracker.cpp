@@ -16,8 +16,6 @@
 
 namespace Ptracker {
 
-void (*onDirChangedPtr)(uint8_t);
-void (*onPositionChangedPtr)(int16_t);
 static volatile int16_t xPos;
 static volatile uint8_t dir;
 
@@ -45,18 +43,18 @@ ISR(INT0_vect) {
 		if (PTRACKER_DIR_PORT & PTRACKER_DIR_PIN) {
 			xPos++;
 			if (!dir) {
-				onDirChangedPtr(1);
+				//onDirChangedPtr(1);
 			}
 			dir = 1;
 		}
 		else {
 			xPos--;
 			if (dir) {
-				onDirChangedPtr(0);
+				//onDirChangedPtr(0);
 			}
 			dir = 0;
 		}
-		onPositionChangedPtr(xPos);
+		//onPositionChangedPtr(xPos);
 	}
 }
 }
