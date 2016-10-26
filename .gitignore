@@ -33,6 +33,7 @@ sites
 
 # Exclude Hex and listing files
 *.hex
+*.eep
 *.lss
 *.elf
 *.map
