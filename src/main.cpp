@@ -16,10 +16,8 @@ int main() {
 	cli();
 	Usart0::initUsart();
 	Timer0::initTimer();
-	//Ptracker::onDirChangedPtr = Core::onDirChanged;
-	//Ptracker::onPositionChangedPtr = Core::onPositionChanged;
-	//Ptracker::initTracker();
-	//Timer1::initTimer();
+	Ptracker::initTracker();
+	Timer1::initTimer();
 	Core::initCore();
 	sei();
 	while(1) {

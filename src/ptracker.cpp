@@ -8,6 +8,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include "../inc/ptracker.h"
+#include "../inc/core.h"
 
 #define PTRACKER_DIR_PORT PINB
 #define PTRACKER_ENA_PORT PINL
@@ -41,20 +42,20 @@ int16_t getPos() {
 ISR(INT0_vect) {
 	if (PTRACKER_ENA_PORT & PTRACKER_ENA_PIN) {
 		if (PTRACKER_DIR_PORT & PTRACKER_DIR_PIN) {
-			xPos++;
-			if (!dir) {
-				//onDirChangedPtr(1);
+			xPos--;
+			if (dir != Backward) {
+				Core::onDirChanged(Backward);
 			}
-			dir = 1;
+			dir = Backward;
 		}
 		else {
-			xPos--;
-			if (dir) {
-				//onDirChangedPtr(0);
+			xPos++;
+			if (dir != Forward) {
+				Core::onDirChanged(Forward);
 			}
-			dir = 0;
+			dir = Forward;
 		}
-		//onPositionChangedPtr(xPos);
+		Core::onPositionChanged(xPos);
 	}
 }
 }

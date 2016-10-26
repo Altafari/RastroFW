@@ -10,14 +10,17 @@
 
 namespace Ptracker{
 
+enum Direction {
+	Forward,
+	Backward
+};
+
 void initTracker();
 
 void setZero();
 
 int16_t getPos();
 
-extern void (*onDirChangedPtr)(uint8_t);
-extern void (*onPositionChangedPtr)(int16_t);
 }
 
 #endif /* PTRACKER_H_ */

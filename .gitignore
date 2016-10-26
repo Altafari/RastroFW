@@ -31,3 +31,9 @@ sites
 *.out
 *.appe./main.c 
 
+# Exclude Hex and listing files
+*.hex
+*.lss
+*.elf
+*.map
+

@@ -61,9 +61,9 @@ void loopCore() {
 					settings.header[1] == 'F' &&
 					checkCrc16((uint8_t*)&settings, sizeof(settings)) &&
 					verifySettings()) {
-				//Ptracker::setZero();
-				//isEnabled = 1;
-				//Timer1::setPulseDuration(settings.expTime);
+				Ptracker::setZero();
+				isEnabled = 1;
+				Timer1::setPulseDuration(settings.expTime);
 				dataSize = ((settings.lnLength + 7) >> 3) + 4;
 				sendACK();
 			}
@@ -85,10 +85,10 @@ inline void sendACK() {
 inline void sendNAK() {
 	Usart0::write((uint8_t*)nak, 3);
 }
-/*
+
 void onDirChanged(uint8_t dir) {
 	if (settings.mode){
-		isEnabled = !dir;
+		isEnabled = (dir == Ptracker::Forward);
 	}
 	else {
 		isEnabled = 1;
@@ -96,12 +96,11 @@ void onDirChanged(uint8_t dir) {
 }
 
 void onPositionChanged(int16_t xPos) {
-	Timer1::pulse();
 	if (isEnabled && computeLaserState(xPos)) {
 		Timer1::pulse();
 	}
 }
-*/
+
 inline uint8_t computeLaserState(int16_t xPos) {
   if ((xPos < settings.offset) || (xPos >= settings.offset + settings.lnLength)) {
     return defaultLaserState;
