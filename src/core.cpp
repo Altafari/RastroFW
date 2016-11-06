@@ -28,7 +28,8 @@ uint8_t buffer[2][BUFF_SIZE];
 uint16_t dataSize;
 uint8_t *rxBuff;
 uint8_t *wBuff;
-uint8_t isEnabled;
+volatile uint8_t isEnabled;
+volatile uint8_t doSwap;
 
 const char *nak = "NAK";
 const char *ack = "ACK";
@@ -38,6 +39,7 @@ struct Settings settings;
 void initCore() {
 	rxBuff = buffer[0];
 	wBuff = buffer[1];
+	doSwap = 0;
 	memset(wBuff, 0, BUFF_SIZE);
 }
 
@@ -49,7 +51,7 @@ void loopCore() {
 			if (Usart0::readBytes(rxBuff, dataSize) == dataSize &&
 					rxBuff[1] == 'N' &&
 					checkCrc16(rxBuff, dataSize)) {
-				swapBuffers();
+				doSwap = 1;
 				sendACK();
 			}
 			else {
@@ -87,11 +89,15 @@ inline void sendNAK() {
 }
 
 void onDirChanged(uint8_t dir) {
-	if (settings.mode){
+	if (settings.mode) {
 		isEnabled = (dir == Ptracker::Forward);
 	}
 	else {
 		isEnabled = 1;
+	}
+	if (doSwap) {
+		swapBuffers();
+		doSwap = 0;
 	}
 }
 
@@ -102,17 +108,17 @@ void onPositionChanged(int16_t xPos) {
 }
 
 inline uint8_t computeLaserState(int16_t xPos) {
-  if ((xPos < settings.offset) || (xPos >= settings.offset + settings.lnLength)) {
-    return defaultLaserState;
-  }
-  return takeBitFromBuffer(xPos - settings.offset);
+	if ((xPos < settings.offset) || (xPos >= settings.offset + settings.lnLength)) {
+		return defaultLaserState;
+	}
+	return takeBitFromBuffer(xPos - settings.offset);
 }
 
 
 inline uint8_t takeBitFromBuffer(int16_t idx) {
-  uint8_t shift = ((uint8_t)idx) & 7; //three LSBs
-  uint8_t dbyte = wBuff[idx >> 3];
-  return (dbyte >> shift) & 1;
+	uint8_t shift = idx & 7; //three LSBs
+	uint8_t dbyte = wBuff[2 + (idx >> 3)];	// Header is 2 bytes long!
+	return (dbyte >> shift) & 1;
 }
 
 inline void swapBuffers() {
