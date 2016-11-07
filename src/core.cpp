@@ -28,8 +28,7 @@ uint8_t buffer[2][BUFF_SIZE];
 uint16_t dataSize;
 uint8_t *rxBuff;
 uint8_t *wBuff;
-volatile uint8_t isEnabled;
-volatile uint8_t doSwap;
+uint8_t isEnabled;
 
 const char *nak = "NAK";
 const char *ack = "ACK";
@@ -39,7 +38,6 @@ struct Settings settings;
 void initCore() {
 	rxBuff = buffer[0];
 	wBuff = buffer[1];
-	doSwap = 0;
 	memset(wBuff, 0, BUFF_SIZE);
 }
 
@@ -51,7 +49,7 @@ void loopCore() {
 			if (Usart0::readBytes(rxBuff, dataSize) == dataSize &&
 					rxBuff[1] == 'N' &&
 					checkCrc16(rxBuff, dataSize)) {
-				doSwap = 1;
+				swapBuffers();
 				sendACK();
 			}
 			else {
@@ -94,10 +92,6 @@ void onDirChanged(uint8_t dir) {
 	}
 	else {
 		isEnabled = 1;
-	}
-	if (doSwap) {
-		swapBuffers();
-		doSwap = 0;
 	}
 }
 
