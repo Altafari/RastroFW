@@ -5,18 +5,10 @@
  *      Author: amh
  */
 
+#include "cordic8.h"
+
 namespace Cordic8 {
-
-	struct Vector2 {
-		int8_t x;
-		int8_t y;
-	};
-
-	struct RotMatrix {
-		int8_t cos;
-		int8_t sin;
-	};
-
+	
 	const RotMatrix rotations[6] = {
 		{91, 91},
 		{118, 49},
@@ -28,27 +20,35 @@ namespace Cordic8 {
 
 	inline Vector2 rotateVector(Vector2 a, RotMatrix r) {
 		Vector2 res;
-		res.x = ((int16_t)r.cos * a.x - (int16_t)r.sin * a.y) >> 7;
-		res.y = ((int16_t)r.sin * a.x + (int16_t)r.cos * a.y) >> 7;
+		res.x = ((int16_t)r.cos * a.x + (int16_t)r.sin * a.y) >> 7;
+		res.y = (-(int16_t)r.sin * a.x + (int16_t)r.cos * a.y) >> 7;
 		return res;
 	}
 
-	int8_t computeAngle (int8_t i, int8_t q) {
-		int8_t res = 0;	// Extract quadrature signs - two MSB
+	int8_t computeAngle(int8_t i, int8_t q) {
+		int8_t res;
 		Vector2 vect;
-		if (i < 0) {
-			vect.x = -i;
-			res |= 2;
-		}
-		else {
-			vect.x = i;
-		}
-		if (q < 0) {
-			vect.y = -q;
-			res |= 1;
-		}
-		else {
-			vect.y = q;
+		int8_t quadrant = (i < 0) + 2 * (q < 0);
+		switch(quadrant) {
+			case 0:		// First
+				vect.x = i;
+				vect.y = q;
+				res = 0;
+			break;
+			case 1:		// Second - rotate 90 deg
+				vect.x = q;
+				vect.y = -i;
+				res = 1;
+			break;
+			case 2:		// Fourth - rotate 270 deg
+				vect.x = -q;
+				vect.y = i;
+				res = 3;
+			break;
+			case 3:		// Third rotate 180 deg
+				vect.x = -i;
+				vect.y = -q;
+				res = 2;
 		}
 		for (int i = 0; i < 6; i++) {
 			Vector2 rot = rotateVector(vect, rotations[i]);
