@@ -55,7 +55,7 @@ ISR(INT0_vect) {
 			}
 			dir = Forward;
 		}
-		Core::onPositionChanged(xPos);
+		//Core::onPositionChanged(xPos);
 	}
 }
 }

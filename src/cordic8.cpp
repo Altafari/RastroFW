@@ -5,7 +5,7 @@
  *      Author: amh
  */
 
-#include "cordic8.h"
+#include "../inc/cordic8.h"
 
 namespace Cordic8 {
 	

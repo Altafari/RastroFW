@@ -9,6 +9,7 @@
 #include "../inc/usart0.h"
 #include "../inc/timer0.h"
 #include "../inc/timer1.h"
+#include "../inc/quadrature.h"
 #include "../inc/ptracker.h"
 #include "../inc/core.h"
 
@@ -16,6 +17,8 @@ int main() {
 	cli();
 	Usart0::initUsart();
 	Timer0::initTimer();
+	// TODO: Init ADC and timer, check FP performance for ~10kHz
+	Quadrature::init();
 	Ptracker::initTracker();
 	Timer1::initTimer();
 	Core::initCore();
