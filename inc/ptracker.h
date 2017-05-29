@@ -8,11 +8,10 @@
 #ifndef PTRACKER_H_
 #define PTRACKER_H_
 
-namespace Ptracker{
+namespace Ptracker {
 
 enum Direction {
-	Forward,
-	Backward
+    Forward, Backward
 };
 
 void initTracker();

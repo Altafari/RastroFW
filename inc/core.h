@@ -11,12 +11,12 @@
 namespace Core {
 
 struct Settings {
-	uint8_t header[2];
-	int16_t lnLength;
-	int16_t offset;
-	int16_t expTime;
-	uint8_t mode;
-	int16_t crc16;
+    uint8_t header[2];
+    int16_t lnLength;
+    int16_t offset;
+    int16_t expTime;
+    uint8_t mode;
+    int16_t crc16;
 };
 
 void initCore();

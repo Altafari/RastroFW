@@ -16,15 +16,15 @@
 
 namespace Usart0 {
 
-	extern volatile uint8_t timer;
-	void initUsart();
-	void disableUsart();
-	uint8_t available();
-	uint8_t peek();
-	uint8_t read();
-	uint16_t readBytes(uint8_t *ptr, uint16_t cnt);
-	void write(const uint8_t *ptr, uint8_t cnt);
-	uint8_t isTxBusy();
+extern volatile uint8_t timer;
+void initUsart();
+void disableUsart();
+uint8_t available();
+uint8_t peek();
+uint8_t read();
+uint16_t readBytes(uint8_t *ptr, uint16_t cnt);
+void write(const uint8_t *ptr, uint8_t cnt);
+uint8_t isTxBusy();
 }
 
 #endif /* SRC_USART0_H_ */
