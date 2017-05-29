@@ -24,7 +24,6 @@ void initTimer() {
 }
 
 ISR(TIMER0_COMPA_vect) {
-	PORTC ^= (1<<PC5);
 	Usart0::timer++;
 }
 }

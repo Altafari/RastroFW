@@ -10,25 +10,22 @@
 #include "../inc/ptracker.h"
 #include "../inc/core.h"
 
-#define PTRACKER_DIR_PORT PINB
-#define PTRACKER_ENA_PORT PINL
-#define PTRACKER_DIR_PIN (1<<PB0)
-#define PTRACKER_ENA_PIN (1<<PL0)
-
 namespace Ptracker {
 
 static volatile int16_t xPos;
-static volatile uint8_t dir;
+static volatile bool isCw;
 
 void initTracker() {
-	EICRA = (1<<ISC01) | (1<<ISC00);	// Interrupt on the rising edge
+	DDRB &= ~((1<<PORTB0) | (1<<PORTB1));
+	EICRA = (1<<ISC00);	// Interrupt on the rising and falling edges
 	EICRB = 0;
-	EIMSK = (1<<INT0);
+	EIMSK = (1<<INT0) | (1<<INT1);
 }
 
 void setZero() {
 	cli();
 	xPos = 0;
+	isCw = false;
 	sei();
 }
 
@@ -39,23 +36,49 @@ int16_t getPos() {
 	return res;
 }
 
+bool getDir() {
+	return isCw;
+}
+
+void onClockWise() {
+	xPos++;
+	if (!isCw) {
+		isCw = true;
+		Core::onDirChanged(isCw);
+	}
+	Core::onPositionChanged(xPos);
+}
+
+void onCounterClockWise() {
+	xPos--;
+	if (isCw) {
+		isCw = false;
+		Core::onDirChanged(isCw);
+	}
+	Core::onPositionChanged(xPos);
+}
+
 ISR(INT0_vect) {
-	if (PTRACKER_ENA_PORT & PTRACKER_ENA_PIN) {
-		if (PTRACKER_DIR_PORT & PTRACKER_DIR_PIN) {
-			xPos--;
-			if (dir != Backward) {
-				Core::onDirChanged(Backward);
-			}
-			dir = Backward;
-		}
-		else {
-			xPos++;
-			if (dir != Forward) {
-				Core::onDirChanged(Forward);
-			}
-			dir = Forward;
-		}
-		//Core::onPositionChanged(xPos);
+	switch(PINB & 3) {
+	case 0:		// B0 -> 0; B1 == 0 => cw
+	case 3:		// B0 -> 1; B1 == 1 => cw
+		onClockWise();
+		break;
+	case 1:		// B0 -> 1; B1 == 0 => ccw
+	case 2:		// B0 -> 0; B1 == 1 => ccw
+		onCounterClockWise();
+	}
+}
+
+ISR(INT1_vect) {
+	switch(PINB & 3) {
+	case 1:		// B0 == 1; B1-> 0 => cw
+	case 2:		// B0 == 0; B1-> 1 => cw
+		onClockWise();
+		break;
+	case 0:		// B0 == 0; B1-> 0 => ccw
+	case 3:		// B0 == 1; B1-> 1 => ccw
+		onCounterClockWise();
 	}
 }
 }

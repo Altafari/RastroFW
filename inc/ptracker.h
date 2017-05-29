@@ -21,6 +21,8 @@ void setZero();
 
 int16_t getPos();
 
+bool getDir();
+
 }
 
 #endif /* PTRACKER_H_ */
