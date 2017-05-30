@@ -10,9 +10,8 @@
 
 namespace Timer0 {
 
-typedef void (*FVoid)(void);
 void initTimer(void);
-extern FVoid timerHandlers[5];
+extern uint8_t counter;
 }
 
 #endif /* TIMER0_H_ */

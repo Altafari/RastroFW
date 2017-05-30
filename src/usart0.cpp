@@ -72,8 +72,7 @@ void write(const uint8_t *ptr, uint8_t cnt) {
     if (!cnt) {
         return;
     }
-    while (txBytesLeft != 0)
-        ; // Wait while transmission completes
+    while (txBytesLeft != 0); // Wait while transmission completes
     txPtr = ptr;
     txBytesLeft = cnt;
     UCSR0B |= (1 << UDRIE0);

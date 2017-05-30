@@ -14,6 +14,8 @@
 
 namespace Timer0 {
 
+uint8_t counter;
+
 void initTimer() {
     TCCR0A = (1 << WGM01);	// Mode2: CTC
     TCCR0B = (1 << CS01) | (1 << CS00);	// CLKio/64
@@ -25,5 +27,6 @@ void initTimer() {
 
 ISR(TIMER0_COMPA_vect) {
     Usart0::timer++;
+    counter++;
 }
 }

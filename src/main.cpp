@@ -6,11 +6,15 @@
  */
 
 #include <avr/interrupt.h>
+#include <stdio.h>
+#include <string.h>
 #include "../inc/usart0.h"
 #include "../inc/timer0.h"
 #include "../inc/timer1.h"
 #include "../inc/ptracker.h"
 #include "../inc/core.h"
+
+char textBuffer[128];
 
 int main() {
     cli();
@@ -20,7 +24,16 @@ int main() {
     Timer1::initTimer();
     Core::initCore();
     sei();
+    int16_t prevPos = -1;
     while (1) {
-        Core::loopCore();
+        //Core::loopCore();
+        int16_t newPos = Ptracker::getPos();
+        if (prevPos != newPos) {
+            sprintf(textBuffer, "P=%d", newPos);
+            Usart0::write((uint8_t*) textBuffer, (uint8_t) strlen(textBuffer));
+            prevPos = newPos;
+        }
+        while(Timer0::counter != 0);
     }
 }
+
