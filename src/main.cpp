@@ -28,11 +28,11 @@ int main() {
     while (1) {
         //Core::loopCore();
         int16_t newPos = Ptracker::getPos();
-        if (prevPos != newPos) {
-            sprintf(textBuffer, "P=%d", newPos);
+       // if (prevPos != newPos) {
+            sprintf(textBuffer, "P=%d\n\r", newPos);
             Usart0::write((uint8_t*) textBuffer, (uint8_t) strlen(textBuffer));
             prevPos = newPos;
-        }
+       // }
         while(Timer0::counter != 0);
     }
 }

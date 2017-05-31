@@ -14,7 +14,7 @@
 
 namespace Timer0 {
 
-uint8_t counter;
+volatile uint8_t counter;
 
 void initTimer() {
     TCCR0A = (1 << WGM01);	// Mode2: CTC

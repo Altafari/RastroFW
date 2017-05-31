@@ -16,10 +16,10 @@ static volatile int16_t xPos;
 static volatile bool isCw;
 
 void initTracker() {
-    DDRB &= ~((1 << PORTB0) | (1 << PORTB1));
-    EICRA = (1 << ISC00);	// Interrupt on the rising and falling edges
+    DDRD &= ~((1 << PORTD2) | (1 << PORTD3));
+    EICRA = (1 << ISC00) | (1 << ISC10);	// Interrupt on the rising and falling edges
     EICRB = 0;
-    EIMSK = (1 << INT0) | (1 << INT1);
+    EIMSK |= (1 << INT0) | (1 << INT1);
 }
 
 void setZero() {
@@ -40,26 +40,26 @@ bool getDir() {
     return isCw;
 }
 
-void onClockWise() {
+inline void onClockWise() {
     xPos++;
     if (!isCw) {
         isCw = true;
-        Core::onDirChanged(isCw);
+        //Core::onDirChanged(isCw);
     }
-    Core::onPositionChanged(xPos);
+    //Core::onPositionChanged(xPos);
 }
 
-void onCounterClockWise() {
+inline void onCounterClockWise() {
     xPos--;
     if (isCw) {
         isCw = false;
-        Core::onDirChanged(isCw);
+        //Core::onDirChanged(isCw);
     }
-    Core::onPositionChanged(xPos);
+    //Core::onPositionChanged(xPos);
 }
 
 ISR(INT0_vect) {
-    switch (PINB & 3) {
+    switch (PIND & 3) {
     case 0:		// B0 -> 0; B1 == 0 => cw
     case 3:		// B0 -> 1; B1 == 1 => cw
         onClockWise();
@@ -71,7 +71,7 @@ ISR(INT0_vect) {
 }
 
 ISR(INT1_vect) {
-    switch (PINB & 3) {
+    switch (PIND & 3) {
     case 1:		// B0 == 1; B1-> 0 => cw
     case 2:		// B0 == 0; B1-> 1 => cw
         onClockWise();

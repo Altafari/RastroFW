@@ -11,7 +11,7 @@
 namespace Timer0 {
 
 void initTimer(void);
-extern uint8_t counter;
+extern volatile uint8_t counter;
 }
 
 #endif /* TIMER0_H_ */
