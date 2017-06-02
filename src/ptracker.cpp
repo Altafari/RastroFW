@@ -17,8 +17,8 @@ namespace Ptracker {
 #define INTERP_MASK 3
 #define INTERP_FACTOR 4
 #define INTERP_EXPRESSION (xPos * INTERP_FACTOR | (interpState & INTERP_MASK))
-#define MAX_INTERP_INTERVAL 10000
-#define MIN_INTERP_INTERVAL 100
+#define MAX_INTERP_INTERVAL 30000
+#define MIN_INTERP_INTERVAL 64
 #define MAX_ACCELERATION_FRACTION 8
 #define INITIAL_INTERP_STATE 4
 
@@ -34,13 +34,12 @@ void initTracker() {
     EICRB = 0;
     EIMSK |= (1 << INT0) | (1 << INT1);
     interpState = INITIAL_INTERP_STATE;
+    OCR3A = MAX_INTERP_INTERVAL;
     TCCR3A = 0;
-    TCCR3B = 1 << WGM32;
-    TIMSK3 = 1 << TOIE3;
+    TCCR3B = (1 << WGM32) | (1 << CS31) | (1 << CS30);
+    TIMSK3 = (1 << OCIE3A);
     TCCR4A = 0;
-    TCCR4B = 0;
-    // For debug
-    DDRF = (1 << PORTF6) | (1 << PORTF7);
+    TCCR4B = (1 << CS41) | (1 << CS40);
 }
 
 void setZero() {
@@ -64,6 +63,7 @@ bool getDir() {
 inline void updateInterpTimer() {
     uint16_t timeInterval = TCNT4;
     TCNT4 = 0;
+    TCNT3 = 0;
     if ((TIFR4 & (1 << TOV4)) != 0) {
         timeInterval = MAX_INTERP_INTERVAL;
         TIFR4 = (1 << TOV4);
@@ -75,7 +75,7 @@ inline void updateInterpTimer() {
             timeInterval = MAX_INTERP_INTERVAL;
         }
     }
-    OCR3B = timeInterval / INTERP_FACTOR;
+    OCR3A = timeInterval / INTERP_FACTOR;
 }
 
 inline void onClockWise() {
@@ -84,10 +84,9 @@ inline void onClockWise() {
     updateInterpTimer();
     if (!isCw) {
         isCw = true;
-        //Core::onDirChanged(isCw);
+        Core::onDirChanged(isCw);
     }
-    //Core::onPositionChanged(INTERP_EXPRESSION);
-    PORTF ^= (1 << 7);
+    Core::onPositionChanged(INTERP_EXPRESSION);
     PORTF ^= (1 << 6);
 }
 
@@ -97,11 +96,9 @@ inline void onCounterClockWise() {
     updateInterpTimer();
     if (isCw) {
         isCw = false;
-        //Core::onDirChanged(isCw);
+        Core::onDirChanged(isCw);
     }
-    //Core::onPositionChanged(INTERP_EXPRESSION);
-    PORTF ^= (1 << 7);
-    PORTF ^= (1 << 6);
+    Core::onPositionChanged(INTERP_EXPRESSION);
 }
 
 ISR(INT0_vect) {
@@ -128,9 +125,10 @@ ISR(INT1_vect) {
     }
 }
 
-ISR(TIMER3_OVF_vect) {
-    interpState = stateTransitions[interpState];
-    //Core::onPositionChanged(INTERP_EXPRESSION);
-    PORTF ^= (1 << 7);
+ISR(TIMER3_COMPA_vect) {
+    if (interpState != stateTransitions[interpState]) {
+        Core::onPositionChanged(INTERP_EXPRESSION);
+        interpState = stateTransitions[interpState];
+    }
 }
 }
