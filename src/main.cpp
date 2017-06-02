@@ -24,16 +24,8 @@ int main() {
     Timer1::initTimer();
     Core::initCore();
     sei();
-    int16_t prevPos = -1;
     while (1) {
-        //Core::loopCore();
-        int16_t newPos = Ptracker::getPos();
-       // if (prevPos != newPos) {
-            sprintf(textBuffer, "P=%d\n\r", newPos);
-            Usart0::write((uint8_t*) textBuffer, (uint8_t) strlen(textBuffer));
-            prevPos = newPos;
-       // }
-        while(Timer0::counter != 0);
+        Core::loopCore();
     }
 }
 
