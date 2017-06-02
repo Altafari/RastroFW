@@ -12,14 +12,35 @@
 
 namespace Ptracker {
 
+#define UP_COUNTING 0
+#define DOWN_COUNTING 8
+#define INTERP_MASK 3
+#define INTERP_FACTOR 4
+#define INTERP_EXPRESSION (xPos * INTERP_FACTOR | (interpState & INTERP_MASK))
+#define MAX_INTERP_INTERVAL 10000
+#define MIN_INTERP_INTERVAL 100
+#define MAX_ACCELERATION_FRACTION 8
+#define INITIAL_INTERP_STATE 4
+
 static volatile int16_t xPos;
 static volatile bool isCw;
+// This is a state machine used for interpolation
+static const uint8_t stateTransitions[] = { 1, 2, 3, 3, 4, 4, 5, 6 };
+static volatile uint8_t interpState;
 
 void initTracker() {
     DDRD &= ~((1 << PORTD2) | (1 << PORTD3));
-    EICRA = (1 << ISC00) | (1 << ISC10);	// Interrupt on the rising and falling edges
+    EICRA = (1 << ISC00) | (1 << ISC10); // Interrupt on the rising and falling edges
     EICRB = 0;
     EIMSK |= (1 << INT0) | (1 << INT1);
+    interpState = INITIAL_INTERP_STATE;
+    TCCR3A = 0;
+    TCCR3B = 1 << WGM32;
+    TIMSK3 = 1 << TOIE3;
+    TCCR4A = 0;
+    TCCR4B = 0;
+    // For debug
+    DDRF = (1 << PORTF6) | (1 << PORTF7);
 }
 
 void setZero() {
@@ -31,7 +52,7 @@ void setZero() {
 
 int16_t getPos() {
     cli();
-    int16_t res = xPos;	// int16_t is not atomic on 8-bit mcu
+    int16_t res = INTERP_EXPRESSION;
     sei();
     return res;
 }
@@ -40,22 +61,47 @@ bool getDir() {
     return isCw;
 }
 
+inline void updateInterpTimer() {
+    uint16_t timeInterval = TCNT4;
+    TCNT4 = 0;
+    if ((TIFR4 & (1 << TOV4)) != 0) {
+        timeInterval = MAX_INTERP_INTERVAL;
+        TIFR4 = (1 << TOV4);
+    } else {
+        if (timeInterval < MIN_INTERP_INTERVAL) {
+            timeInterval = MIN_INTERP_INTERVAL;
+        }
+        if (timeInterval > MAX_INTERP_INTERVAL) {
+            timeInterval = MAX_INTERP_INTERVAL;
+        }
+    }
+    OCR3B = timeInterval / INTERP_FACTOR;
+}
+
 inline void onClockWise() {
     xPos++;
+    interpState = UP_COUNTING;
+    updateInterpTimer();
     if (!isCw) {
         isCw = true;
         //Core::onDirChanged(isCw);
     }
-    //Core::onPositionChanged(xPos);
+    //Core::onPositionChanged(INTERP_EXPRESSION);
+    PORTF ^= (1 << 7);
+    PORTF ^= (1 << 6);
 }
 
 inline void onCounterClockWise() {
     xPos--;
+    interpState = DOWN_COUNTING;
+    updateInterpTimer();
     if (isCw) {
         isCw = false;
         //Core::onDirChanged(isCw);
     }
-    //Core::onPositionChanged(xPos);
+    //Core::onPositionChanged(INTERP_EXPRESSION);
+    PORTF ^= (1 << 7);
+    PORTF ^= (1 << 6);
 }
 
 ISR(INT0_vect) {
@@ -80,5 +126,11 @@ ISR(INT1_vect) {
     case 3:		// B0 == 1; B1-> 1 => ccw
         onCounterClockWise();
     }
+}
+
+ISR(TIMER3_OVF_vect) {
+    interpState = stateTransitions[interpState];
+    //Core::onPositionChanged(INTERP_EXPRESSION);
+    PORTF ^= (1 << 7);
 }
 }
