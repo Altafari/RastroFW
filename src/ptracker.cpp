@@ -19,8 +19,7 @@ namespace Ptracker {
 #define INTERP_EXPRESSION (xPos * INTERP_FACTOR | (interpState & INTERP_MASK))
 #define MAX_INTERP_INTERVAL 30000
 #define MIN_INTERP_INTERVAL 64
-#define MAX_ACCELERATION_FRACTION 8
-#define INITIAL_INTERP_STATE 4
+#define INITIAL_INTERP_STATE 2
 
 static volatile int16_t xPos;
 static volatile bool isCw;
