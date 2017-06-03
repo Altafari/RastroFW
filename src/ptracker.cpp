@@ -75,25 +75,25 @@ inline void updateInterpTimer() {
             timeInterval = MAX_INTERP_INTERVAL;
         }
     }
+    TIFR3 = (1 << OCF3A);
     OCR3A = timeInterval / INTERP_FACTOR;
 }
 
 inline void onClockWise() {
     xPos++;
-    interpState = UP_COUNTING;
     updateInterpTimer();
+    interpState = UP_COUNTING;
     if (!isCw) {
         isCw = true;
         Core::onDirChanged(isCw);
     }
     Core::onPositionChanged(INTERP_EXPRESSION);
-    PORTF ^= (1 << 6);
 }
 
 inline void onCounterClockWise() {
     xPos--;
-    interpState = DOWN_COUNTING;
     updateInterpTimer();
+    interpState = DOWN_COUNTING;
     if (isCw) {
         isCw = false;
         Core::onDirChanged(isCw);
