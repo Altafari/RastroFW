@@ -13,9 +13,9 @@
 namespace Ptracker {
 
 #define UP_COUNTING 0
-#define DOWN_COUNTING 8
-#define INTERP_MASK 3
-#define INTERP_FACTOR 4
+#define DOWN_COUNTING 3
+#define INTERP_MASK 1
+#define INTERP_FACTOR 2
 #define INTERP_EXPRESSION (xPos * INTERP_FACTOR | (interpState & INTERP_MASK))
 #define MAX_INTERP_INTERVAL 30000
 #define MIN_INTERP_INTERVAL 64
@@ -25,7 +25,7 @@ namespace Ptracker {
 static volatile int16_t xPos;
 static volatile bool isCw;
 // This is a state machine used for interpolation
-static const uint8_t stateTransitions[] = { 1, 2, 3, 3, 4, 4, 5, 6 };
+static const uint8_t stateTransitions[] = { 1, 1, 2, 2 };
 static volatile uint8_t interpState;
 
 void initTracker() {
