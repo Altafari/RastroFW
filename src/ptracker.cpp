@@ -82,22 +82,14 @@ inline void onClockWise() {
     xPos++;
     updateInterpTimer();
     interpState = UP_COUNTING;
-    if (!isCw) {
-        isCw = true;
-        Core::onDirChanged(isCw);
-    }
-    Core::onPositionChanged(INTERP_EXPRESSION);
+    Core::onPositionChanged(INTERP_EXPRESSION, isCw);
 }
 
 inline void onCounterClockWise() {
     xPos--;
     updateInterpTimer();
     interpState = DOWN_COUNTING;
-    if (isCw) {
-        isCw = false;
-        Core::onDirChanged(isCw);
-    }
-    Core::onPositionChanged(INTERP_EXPRESSION);
+    Core::onPositionChanged(INTERP_EXPRESSION, isCw);
 }
 
 ISR(INT0_vect) {
@@ -126,7 +118,7 @@ ISR(INT1_vect) {
 
 ISR(TIMER3_COMPA_vect) {
     if (interpState != stateTransitions[interpState]) {
-        Core::onPositionChanged(INTERP_EXPRESSION);
+        Core::onPositionChanged(INTERP_EXPRESSION, isCw);
         interpState = stateTransitions[interpState];
     }
 }

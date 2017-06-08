@@ -28,7 +28,6 @@ uint8_t buffer[2][BUFF_SIZE];
 uint16_t dataSize;
 uint8_t *rxBuff;
 uint8_t *wBuff;
-uint8_t isEnabled;
 
 const char *nak = "NAK";
 const char *ack = "ACK";
@@ -60,7 +59,6 @@ void loopCore() {
                     && checkCrc16((uint8_t*) &settings, sizeof(settings))
                     && verifySettings()) {
                 Ptracker::setZero();
-                isEnabled = 1;
                 Timer1::setPulseDuration(settings.expTime);
                 dataSize = ((settings.lnLength + 7) >> 3) + 4;
                 sendACK();
@@ -83,26 +81,23 @@ inline void sendNAK() {
     Usart0::write((uint8_t*) nak, 3);
 }
 
-void onDirChanged(uint8_t dir) {
-    if (settings.mode) {
-        isEnabled = (dir == Ptracker::Forward);
-    } else {
-        isEnabled = 1;
-    }
-}
-
-void onPositionChanged(int16_t xPos) {
-    if (isEnabled && computeLaserState(xPos)) {
+void onPositionChanged(int16_t xPos, uint8_t dir) {
+    if (computeLaserState(xPos, dir)) {
         Timer1::pulse();
     }
 }
 
-inline uint8_t computeLaserState(int16_t xPos) {
-    if ((xPos < settings.offset)
-            || (xPos >= settings.offset + settings.lnLength)) {
+inline uint8_t computeLaserState(int16_t xPos, uint8_t dir) {
+    if (dir == Ptracker::Backward) {
+        if (settings.mode) {
+            return defaultLaserState;
+        }
+        xPos -= settings.offset;
+    }
+    if ((xPos < 0) || (xPos >= settings.lnLength)) {
         return defaultLaserState;
     }
-    return takeBitFromBuffer(xPos - settings.offset);
+    return takeBitFromBuffer(xPos);
 }
 
 inline uint8_t takeBitFromBuffer(int16_t idx) {
